@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agricultura e Meio Ambiente - São José do Belmonte</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chosen Palette: Nature Green -->
+    <!-- Application Structure Plan: A side-navigation SPA, consistent with the previous successful catalogs. The left sidebar organizes services into logical rural and environmental categories (e.g., INCRA, Agricultura Familiar, Assistência Técnica). The main content area provides a search bar and interactive accordion cards for each service. This master-detail structure is excellent for guiding farmers and rural citizens through complex bureaucratic processes, allowing them to browse categories and expand specific items for detailed requirements. -->
+    <!-- Visualization & Content Choices: Report Info: Agricultural/Environmental Services Text -> Goal: Guide User -> Presentation: Interactive list/card system -> Interaction: Category filtering, text search, accordion-style detail expansion -> Justification: The source material is entirely procedural. The interactive card system is the most effective way to transform dense, text-based instructions into a user-friendly, task-oriented tool. Unicode icons are used to visually break up text sections (documents, requirements, procedure), enhancing scannability. -> Library/Method: Vanilla JS for DOM manipulation, TailwindCSS for layout. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        :root {
+            --bg-main: #f8f7f4;
+            --bg-sidebar: #e9e7e2;
+            --text-dark: #3a3a3a;
+            --text-light: #5a5a5a;
+            --accent: #16a34a; /* Agriculture Green */
+            --border-color: #d1d5db;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-dark);
+        }
+        .sidebar-item.active {
+            background-color: var(--accent);
+            color: white;
+            font-weight: 600;
+        }
+        .service-card-header {
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+        .service-card-header:hover {
+            background-color: #f0f0f0;
+        }
+        .service-card-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+        }
+        .service-card-details.open {
+            max-height: 2500px; /* Increased for longer content */
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        .icon {
+            font-size: 1.25rem;
+            margin-right: 0.75rem;
+            color: var(--accent);
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="antialiased">
+
+    <div id="app" class="flex flex-col md:flex-row min-h-screen">
+        
+        <aside id="sidebar" class="w-full md:w-64 lg:w-72 bg-[var(--bg-sidebar)] p-4 md:p-6 flex-shrink-0">
+            <h1 class="text-xl font-bold text-gray-800 mb-6">Agricultura e Meio Ambiente</h1>
+            <nav id="category-nav">
+                <ul class="space-y-2">
+                    <li><button data-category="Todos" class="sidebar-item w-full text-left p-3 rounded-lg font-medium text-[var(--text-light)] transition-colors duration-200 hover:bg-gray-300 active">Todos os Serviços</button></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="flex-1 p-4 md:p-8 lg:p-10">
+            <header class="mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-[var(--text-dark)]">Catálogo de Serviços Rurais e Ambientais</h2>
+                <p class="text-md text-[var(--text-light)] mt-1">Encontre informações sobre cadastros, benefícios e assistência técnica.</p>
+                <div class="mt-6">
+                    <input type="text" id="search-input" placeholder="🔎 Pesquisar por serviço..." class="w-full max-w-lg p-3 border border-[var(--border-color)] rounded-lg focus:ring-2 focus:ring-[var(--accent)] focus:outline-none transition-shadow">
+                </div>
+            </header>
+            
+            <div id="services-container" class="space-y-4">
+                
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const servicesData = [
+            {
+                "category": "Cadastro e Regularização Rural (INCRA)",
+                "title": "Solicitar cadastramento de imóvel rural (INCRA)",
+                "description": "Procedimento obrigatório para todos os proprietários de imóveis rurais para integrar e regularizar o imóvel no cadastro federal, resultando na emissão do Certificado de Cadastro de Imóvel Rural (CCIR), indispensável para qualquer transação legal com a terra.",
+                "documents": [
+                    "<strong>Pessoa Física:</strong> RG/CNH e CPF (proprietário e cônjuge), Certidão de Casamento/Nascimento.",
+                    "<strong>Pessoa Jurídica:</strong> Cartão CNPJ, Ato Constitutivo, Documentos dos sócios.",
+                    "<strong>Imóvel Rural:</strong> Matrícula, Escritura ou Título de Posse, Planta/Memorial (se houver), NIRF (se houver)."
+                ],
+                "requirements": ["Ser proprietário ou possuidor do imóvel rural.", "O imóvel não deve possuir cadastro prévio no INCRA.", "Possuir toda a documentação necessária."],
+                "procedure": [
+                    "<strong>Presencial:</strong> Comparecer à Secretaria de Agricultura com os documentos para que um atendente realize a solicitação.",
+                    "<strong>Online:</strong>",
+                    "1) Acessar o Sistema Nacional de Cadastro Rural (SNCR) com conta Gov.br.",
+                    "2) Preencher a Declaração para Cadastro Rural (DCR) com dados pessoais e do imóvel.",
+                    "3) Anexar a documentação digitalizada.",
+                    "4) Aguardar a análise do INCRA.",
+                    "5) Após aprovação, emitir o CCIR mediante pagamento de taxa."
+                ]
+            },
+            {
+                "category": "Cadastro e Regularização Rural (INCRA)",
+                "title": "Solicitar transferência de imóvel rural (INCRA)",
+                "description": "Procedimento para atualizar a titularidade de uma propriedade já cadastrada no INCRA, necessário em casos de compra e venda, doação ou herança. Garante que o CCIR seja emitido em nome do novo proprietário.",
+                "documents": [
+                    "<strong>Novo Proprietário (Pessoa Física):</strong> RG/CNH e CPF (proprietário e cônjuge), Certidão de Casamento/Nascimento.",
+                    "<strong>Novo Proprietário (Pessoa Jurídica):</strong> Cartão CNPJ, Ato Constitutivo, Documentos dos sócios.",
+                    "<strong>Transferência e Imóvel:</strong> Matrícula atualizada em nome do novo dono, Escritura, Formal de Partilha ou Carta de Arrematação, último CCIR, comprovante de quitação do ITR."
+                ],
+                "requirements": ["Imóvel já deve ter cadastro no INCRA.", "Solicitante deve ser o novo proprietário.", "CCIR anterior deve estar quitado.", "Possuir documento que comprove a transferência."],
+                "procedure": [
+                    "<strong>Presencial:</strong> Comparecer à Secretaria de Agricultura com os documentos para o atendente realizar a alteração de titularidade.",
+                    "<strong>Online:</strong>",
+                    "1) Acessar o SNCR com conta Gov.br (prata ou ouro).",
+                    "2) Selecionar 'Alteração Cadastral' e localizar o imóvel.",
+                    "3) Preencher a DCR com os dados do novo titular.",
+                    "4) Anexar a documentação digitalizada.",
+                    "5) Após análise e aprovação do INCRA, emitir o novo CCIR."
+                ]
+            },
+            {
+                "category": "Cadastro e Regularização Rural (INCRA)",
+                "title": "Solicitar atualização de imóvel rural (INCRA)",
+                "description": "Permite corrigir ou alterar informações de um imóvel já cadastrado no INCRA, como mudança de dono, alteração de área, mudança de dados pessoais do proprietário ou da exploração da terra. Manter o cadastro atualizado é essencial para a validade do CCIR.",
+                "documents": [
+                    "<strong>Do Imóvel:</strong> Número do CCIR, Matrícula do imóvel.",
+                    "<strong>Do Proprietário:</strong> CPF ou CNPJ, RG/CNH, Comprovante de endereço.",
+                    "<strong>Da Alteração:</strong> Documento que comprova a mudança (ex: Escritura para venda, Certidão de Casamento para mudança de estado civil)."
+                ],
+                "requirements": ["Imóvel deve estar cadastrado no SNCR do Incra."],
+                "procedure": [
+                    "<strong>Presencial:</strong> Comparecer à Secretaria de Agricultura com os documentos para o atendente realizar a atualização cadastral.",
+                    "<strong>Online:</strong>",
+                    "1) Acessar o SNCR com conta Gov.br (prata ou ouro).",
+                    "2) Preencher a Declaração para Cadastro Rural (DCR) com as informações atualizadas.",
+                    "3) Anexar os documentos digitalizados que comprovem a alteração.",
+                    "4) Enviar e acompanhar a análise pelo sistema."
+                ]
+            },
+            {
+                "category": "Cadastro e Regularização Rural (INCRA)",
+                "title": "Solicitar certidão de cadastro (CCIR)",
+                "description": "Permite a emissão do Certificado de Cadastro de Imóvel Rural (CCIR), a 'identidade' do imóvel rural. Este documento é obrigatório para vender, desmembrar, hipotecar ou obter financiamentos para a propriedade.",
+                "documents": [
+                    "<strong>Online:</strong> Código do Imóvel Rural, CPF ou CNPJ do titular.",
+                    "<strong>Presencial (Pessoa Física):</strong> RG, CPF, Comprovante de residência, Certidão de casamento.",
+                    "<strong>Presencial (Pessoa Jurídica):</strong> CNPJ, Contrato Social, Documentos dos sócios.",
+                    "<strong>Presencial (Imóvel):</strong> Matrícula atualizada, Documento de aquisição."
+                ],
+                "requirements": ["Imóvel previamente cadastrado no SNCR.", "Dados atualizados.", "Não possuir débitos de taxas anteriores."],
+                "procedure": [
+                    "<strong>Presencial:</strong> Comparecer à Secretaria de Agricultura com os documentos para o atendente emitir a certidão.",
+                    "<strong>Online:</strong>",
+                    "1) Acessar o portal de emissão do CCIR do Governo Federal.",
+                    "2) Preencher o formulário com o código do imóvel, CPF/CNPJ, UF e município.",
+                    "3) Gerar o PDF, que contém o CCIR e a Guia de Pagamento (GRU).",
+                    "4) Pagar a taxa. O CCIR só é válido após o pagamento."
+                ]
+            },
+            {
+                "category": "Cadastro e Regularização Rural (INCRA)",
+                "title": "Verificar cadastro do imóvel no INCRA",
+                "description": "Permite consultar a situação cadastral de um imóvel rural no sistema do INCRA, informando se o cadastro está ativo e regular, além de exibir dados básicos do imóvel e do proprietário.",
+                "documents": ["Código do Imóvel Rural (13 números)", "CPF do titular declarante", "UF e Município da sede do imóvel"],
+                "requirements": ["Imóvel já deve estar cadastrado no SNCR.", "Não possuir débitos da Taxa de Serviços Cadastrais."],
+                "procedure": [
+                    "<strong>Presencial:</strong> Comparecer à Secretaria de Agricultura com os documentos para o atendente realizar a consulta.",
+                    "<strong>Online:</strong>",
+                    "1) Acessar o portal de emissão do CCIR.",
+                    "2) Preencher os dados do imóvel (código, UF, município, CPF/CNPJ).",
+                    "3) O sistema exibirá o status. Se não houver impedimentos, permitirá baixar o CCIR."
+                ]
+            },
+            {
+                "category": "Agricultura Familiar",
+                "title": "Solicitar agendamento do CAF (Cadastro de Agricultura Familiar)",
+                "description": "Realiza o agendamento para inscrição no Cadastro Nacional da Agricultura Familiar (CAF), documento que identifica o agricultor familiar e é a porta de entrada para políticas públicas como PRONAF, seguro safra e programas de compras de alimentos (PAA, PNAE).",
+                "documents": ["RG e CPF de todos os membros da família (+16 anos)", "Comprovante de Endereço", "Comprovantes de Renda", "CNIS (+18 anos)", "Certidão de Casamento", "Documentos da Terra (Escritura, Recibo, CAR). Documentação adicional pode ser necessária para assentados, cooperativas ou comunidades tradicionais."],
+                "requirements": ["Ser agricultor(a) familiar.", "Para não proprietários, contrato de comodato/arrendamento de no mínimo 12 meses.", "Pertencer a uma das categorias específicas (UFPA, PNRA, etc.)."],
+                "procedure": [
+                    "<strong>Presencial:</strong>",
+                    "1) Comparecer à Secretaria de Agricultura com todos os documentos (originais e cópias).",
+                    "2) O atendente validará a documentação e realizará seu cadastro para a solicitação.",
+                    "3) Será gerado um protocolo. O CAF não é aprovado na hora.",
+                    "4) Aguardar a aprovação para então retirar seu RICAF (Registro de Inscrição no CAF)."
+                ]
+            },
+            {
+                "category": "Reforma Agrária (INCRA)",
+                "title": "Solicitar Contrato de Concessão de Uso (CCU) para assentamento",
+                "description": "Permite que a família assentada em um projeto de reforma agrária formalize sua posse e uso do lote. O CCU é um dos primeiros documentos que garante a segurança jurídica da família no assentamento.",
+                "documents": ["RG/CNH e CPF do titular e cônjuge", "Certidão de Casamento/Nascimento/União Estável", "Comprovante de endereço (conta de luz ou declaração)", "DAP ou CAF (se houver)."],
+                "requirements": ["Ser beneficiário(a) do Programa Nacional de Reforma Agrária.", "Constar na Relação de Beneficiários (RB) do Projeto de Assentamento.", "Estar ocupando e explorando o lote.", "Estar em dia com as obrigações do assentamento."],
+                "procedure": [
+                    "<strong>Presencial:</strong> Comparecer à Secretaria de Agricultura com os documentos para um atendente auxiliar na solicitação.",
+                    "<strong>Online (Plataforma de Governança Territorial - PGT):</strong>",
+                    "1) Acessar a PGT com sua conta gov.br.",
+                    "2) Clicar em 'Solicitar Contrato de Concessão de Uso (CCU)'.",
+                    "3) Atualizar seus dados cadastrais, se necessário.",
+                    "4) Acompanhar o pedido pelo protocolo gerado."
+                ]
+            },
+            {
+                "category": "Reforma Agrária (INCRA)",
+                "title": "Atualizar Dados do Contrato de Concessão de Uso (CCU)",
+                "description": "Garante que o CCU de uma família assentada seja atualizado caso ocorra alguma mudança na composição familiar (nascimento, casamento, óbito). Manter o CCU atualizado é fundamental para a regularidade da família no assentamento.",
+                "documents": ["RG/CNH e CPF do(s) titular(es)", "CCU original", "Documento que comprova a alteração (ex: Certidão de Casamento para incluir cônjuge, Certidão de Óbito para exclusão por falecimento, etc.)."],
+                "requirements": ["Já possuir um CCU válido.", "Ser o titular ou representante legal.", "Haver uma mudança comprovável na composição familiar.", "Manter a ocupação e exploração do lote."],
+                "procedure": [
+                    "<strong>Presencial:</strong>",
+                    "1) Comparecer à Secretaria de Agricultura com o CCU original e os documentos que comprovam a alteração.",
+                    "2) O atendente fornecerá um requerimento para ser preenchido.",
+                    "3) A solicitação será protocolada e enviada para análise no INCRA."
+                ]
+            },
+            {
+                "category": "Meio Ambiente",
+                "title": "Solicitar carta de anuência ambiental",
+                "description": "Permite obter um documento da Secretaria de Meio Ambiente que declara a concordância do município com um empreendimento ou atividade, sendo um requisito comum em processos de licenciamento ambiental estaduais ou federais.",
+                "documents": [
+                    "<strong>Pessoais:</strong> RG, CPF, Comprovante de residência, Procuração (se aplicável).",
+                    "<strong>Do Imóvel:</strong> Recibo do CAR, CCIR atualizado, ITR do último exercício, Matrícula ou documento de posse.",
+                    "<strong>Da Atividade:</strong> Requerimento padrão, Memorial descritivo, Croqui/mapa de localização, ART (se houver obra), Outorga de uso da água (se aplicável)."
+                ],
+                "requirements": ["Justificativa clara para a solicitação.", "Regularidade do imóvel (CAR, CCIR, ITR).", "Atividade compatível com a legislação.", "Inexistência de débitos ambientais.", "Outorga de uso da água (se aplicável)."],
+                "procedure": [
+                    "<strong>Presencial:</strong>",
+                    "1) Reunir a documentação e solicitar o formulário padrão na Secretaria.",
+                    "2) Entregar o formulário preenchido com as cópias dos documentos.",
+                    "3) Receber o protocolo para acompanhar o processo.",
+                    "4) Aguardar análise técnica (pode incluir vistoria).",
+                    "5) Se aprovado, retirar a carta de anuência."
+                ]
+            },
+            {
+                "category": "Assistência Técnica Rural",
+                "title": "Agendar visita técnica - Apicultura",
+                "description": "Permite que agricultores solicitem a visita de um técnico especializado em apicultura para receber orientação sobre manejo de abelhas, instalação de colmeias e melhoria da produção de mel.",
+                "documents": ["Nome completo", "WhatsApp", "CPF ou CNPJ", "Comprovante de residência"],
+                "requirements": ["Comprovar residência no município.", "Comprovar atividade comercial no setor."],
+                "procedure": [
+                    "<strong>Presencial:</strong> Comparecer à Secretaria de Agricultura, apresentar os documentos e agendar a visita.",
+                    "<strong>WhatsApp:</strong> Entrar em contato com a Secretaria, enviar os documentos solicitados e aguardar a confirmação do agendamento (aprox. 10 dias úteis)."
+                ]
+            },
+            {
+                "category": "Assistência Técnica Rural",
+                "title": "Agendar visita técnica - Agronomia",
+                "description": "Permite que produtores solicitem a visita de um engenheiro agrônomo para receber assistência sobre plantio, manejo do solo, controle de pragas e adubação para aumentar a produtividade.",
+                "documents": ["Nome completo", "WhatsApp", "CPF ou CNPJ", "Comprovante de residência"],
+                "requirements": ["Comprovar residência no município.", "Comprovar atividade comercial no setor."],
+                "procedure": [
+                    "<strong>Presencial:</strong> Comparecer à Secretaria de Agricultura, apresentar os documentos e agendar a visita.",
+                    "<strong>WhatsApp:</strong> Entrar em contato com a Secretaria, enviar os documentos solicitados e aguardar a confirmação do agendamento (aprox. 10 dias úteis)."
+                ]
+            },
+            {
+                "category": "Assistência Técnica Rural",
+                "title": "Agendar visita técnica - Medicina Veterinária",
+                "description": "Oferece ao produtor rural a possibilidade de agendar uma visita de um médico veterinário para orientação sobre a saúde e o manejo de seu rebanho (bovinos, caprinos, ovinos, etc.).",
+                "documents": ["Nome completo", "WhatsApp", "CPF ou CNPJ", "Comprovante de residência"],
+                "requirements": ["Comprovar residência no município.", "Comprovar atividade comercial no setor."],
+                "procedure": [
+                    "<strong>Presencial:</strong> Comparecer à Secretaria de Agricultura, apresentar os documentos e agendar a visita.",
+                    "<strong>WhatsApp:</strong> Entrar em contato com a Secretaria, enviar os documentos solicitados e aguardar a confirmação do agendamento (aprox. 10 dias úteis)."
+                ]
+            },
+            {
+                "category": "Assistência Técnica Rural",
+                "title": "Agendar visita técnica - Engenharia de Pesca",
+                "description": "Permite que pescadores e aquicultores solicitem a visita de um engenheiro de pesca para receber orientação sobre manejo da água, alimentação dos peixes e construção de viveiros.",
+                "documents": ["Nome completo", "WhatsApp", "CPF ou CNPJ", "Comprovante de residência"],
+                "requirements": ["Comprovar residência no município.", "Comprovar atividade comercial no setor."],
+                "procedure": [
+                    "<strong>Presencial:</strong> Comparecer à Secretaria de Agricultura, apresentar os documentos e agendar a visita.",
+                    "<strong>WhatsApp:</strong> Entrar em contato com a Secretaria, enviar os documentos solicitados e aguardar a confirmação do agendamento (aprox. 10 dias úteis)."
+                ]
+            },
+            {
+                "category": "Benefícios Rurais e Aposentadoria",
+                "title": "Solicitar declaração de trabalhador rural",
+                "description": "Emite uma declaração que auxilia o trabalhador rural a comprovar o exercício de sua atividade, sendo um documento importante no processo de solicitação de aposentadoria rural junto ao INSS.",
+                "documents": ["<strong>Pessoais:</strong> CPF, RG/CNH, Certidão de Casamento/Nascimento de todos da família.", "<strong>Da Terra:</strong> CCU, Título, CCIR, ITR, Contratos (arrendamento, etc.).", "<strong>Da Atividade (Prova Material):</strong> Notas fiscais, Recibos de compra de insumos, Ficha de sindicato/cooperativa, Comprovantes de programas (Garantia-Safra), Histórico escolar rural dos filhos."],
+                "requirements": [],
+                "procedure": ["Comparecer à Secretaria de Agricultura com o máximo de documentos comprobatórios possíveis para que um atendente possa orientá-lo e emitir a declaração."]
+            },
+            {
+                "category": "Benefícios Rurais e Aposentadoria",
+                "title": "Solicitar declaração de agricultor",
+                "description": "Semelhante ao serviço anterior, foca na emissão de uma declaração que comprova a condição de agricultor familiar, peça importante no conjunto de provas para benefícios como aposentadoria, salário-maternidade e auxílio-doença rural.",
+                "documents": ["<strong>Pessoais:</strong> CPF, RG/CNH.", "<strong>Do Trabalho (Prova Material):</strong> Carteira de Trabalho (CTPS), Contratos de safra, Recibos de pagamento, Ficha de registro de empregado, Nomes de testemunhas."],
+                "requirements": [],
+                "procedure": ["Comparecer à Secretaria de Agricultura com os documentos para que um atendente possa orientá-lo e emitir a declaração."]
+            },
+            {
+                "category": "Saúde Animal (Pets)",
+                "title": "Agendar consulta veterinária para cães",
+                "description": "Permite que tutores de cães agendem atendimento veterinário básico oferecido pela prefeitura, incluindo avaliação de saúde geral, orientação sobre vacinas e tratamento de doenças simples.",
+                "documents": ["Nome completo do tutor", "Telefone para contato", "CPF", "Comprovante de residência"],
+                "requirements": ["Ser morador de São José do Belmonte."],
+                "procedure": [
+                    "<strong>Presencial:</strong> Comparecer à Secretaria de Agricultura com os documentos para agendar a consulta.",
+                    "<strong>Online (WhatsApp):</strong> Enviar os documentos solicitados por WhatsApp para realizar o agendamento."
+                ]
+            },
+            {
+                "category": "Saúde Animal (Pets)",
+                "title": "Agendar consulta veterinária para gatos",
+                "description": "Possibilita o agendamento de consultas veterinárias básicas para gatos, visando promover a saúde dos felinos com avaliações clínicas, orientação sobre cuidados, castração e prevenção de zoonoses.",
+                "documents": ["Nome completo do tutor", "Telefone para contato", "CPF", "Comprovante de residência"],
+                "requirements": ["Ser morador de São José do Belmonte."],
+                "procedure": ["<strong>Presencial:</strong> Comparecer à Secretaria de Agricultura com os documentos para agendar a consulta."]
+            },
+            {
+                "category": "Benefícios Rurais e Aposentadoria",
+                "title": "Solicitar declaração para saque do Garantia Safra",
+                "description": "Permite que o agricultor familiar, que teve perda comprovada de sua lavoura e aderiu ao programa, obtenha a declaração municipal necessária para solicitar o benefício.",
+                "documents": ["RG/CNH", "CPF", "CAF ou DAP válida", "Comprovante de Posse ou Uso da Terra", "Comprovante de Residência", "NIS"],
+                "requirements": ["Ser agricultor familiar com renda de até 1,5 salário mínimo.", "Plantar entre 0,6 e 5,0 hectares de culturas específicas.", "Residir em município com adesão ao programa."],
+                "procedure": ["Comparecer à Secretaria de Agricultura com os documentos necessários para que um atendente emita a declaração."]
+            },
+            {
+                "category": "Benefícios Rurais e Aposentadoria",
+                "title": "Solicitar 2ª via de boleto do Garantia Safra",
+                "description": "Permite que o agricultor que perdeu ou não recebeu o boleto de adesão ao programa possa emitir uma segunda via para efetuar o pagamento e garantir sua participação.",
+                "documents": ["CPF"],
+                "requirements": ["Estar inscrito no Garantia-Safra para a safra atual.", "Possuir CAF ou DAP ativa."],
+                "procedure": [
+                    "1) Comparecer à Secretaria de Agricultura.",
+                    "2) Solicitar a emissão da segunda via do boleto de adesão.",
+                    "3) Apresentar o CPF para localização do cadastro.",
+                    "4) Receber o boleto impresso para pagamento."
+                ]
+            },
+            {
+                "category": "Benefícios Rurais e Aposentadoria",
+                "title": "Solicitar transferência de titularidade do Garantia Safra",
+                "description": "Permite que, em casos específicos como falecimento ou invalidez do titular, o benefício seja transferido para outro membro da família que continue a atividade agrícola.",
+                "documents": ["<strong>Do Titular Original:</strong> Certidão de Óbito, CPF e RG.", "<strong>Do Sucessor:</strong> CPF, RG, Comprovante de Vínculo Familiar (Certidão de Casamento/Nascimento), CAF/DAP, Comprovante de residência."],
+                "requirements": [],
+                "procedure": [
+                    "1) Comparecer à Secretaria de Agricultura com os documentos necessários.",
+                    "2) Preencher o formulário específico para a transferência.",
+                    "3) A solicitação será protocolada e enviada para análise pelos conselhos responsáveis."
+                ]
+            },
+            {
+                "category": "Benefícios Rurais e Aposentadoria",
+                "title": "Solicitar desbloqueio do benefício Garantia Safra",
+                "description": "Destina-se ao agricultor cujo benefício foi bloqueado por alguma pendência (ex: divergência cadastral). O serviço visa regularizar a situação para que o pagamento seja liberado.",
+                "documents": ["CPF e RG", "DAP ou CAF atualizada", "Comprovante de endereço", "NIS"],
+                "requirements": ["Ter aderido ao Garantia Safra.", "Estar com o benefício 'bloqueado'.", "Ter solucionado a pendência que originou o bloqueio."],
+                "procedure": [
+                    "1) Comparecer à Secretaria de Agricultura.",
+                    "2) Apresentar a documentação que comprova a regularização da pendência.",
+                    "3) Aguardar a comunicação ao órgão gestor e a liberação do pagamento."
+                ]
+            },
+             {
+                "category": "Meio Ambiente",
+                "title": "Solicitar licença específica na Secretaria",
+                "description": "Permite que o cidadão ou empresa inicie um processo para obter licenças ambientais ou agrícolas que não se enquadram nos serviços mais comuns. Ex: licença para supressão de vegetação, outorga de uso da água, entre outras.",
+                "documents": [],
+                "requirements": [],
+                "procedure": [ "Comparecer à Secretaria de Agricultura e Meio Ambiente e informar qual é o tipo de licença que deseja solicitar. Um atendente informará quais as documentações necessárias. Você pode também entrar em contato por whatsapp para se informar previamente."]
+            }
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const servicesContainer = document.getElementById('services-container');
+            const categoryNav = document.getElementById('category-nav').querySelector('ul');
+            const searchInput = document.getElementById('search-input');
+
+            const categories = [...new Set(servicesData.map(service => service.category))];
+
+            function initNav() {
+                categories.sort().forEach(category => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<button data-category="${category}" class="sidebar-item w-full text-left p-3 rounded-lg font-medium text-[var(--text-light)] transition-colors duration-200 hover:bg-gray-300">${category}</button>`;
+                    categoryNav.appendChild(li);
+                });
+            }
+
+            function renderServices(filter = 'Todos', searchTerm = '') {
+                servicesContainer.innerHTML = '';
+                let filteredServices = servicesData;
+
+                if (filter !== 'Todos') {
+                    filteredServices = filteredServices.filter(service => service.category === filter);
+                }
+
+                if (searchTerm) {
+                    filteredServices = filteredServices.filter(service => 
+                        service.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                        service.description.toLowerCase().includes(searchTerm.toLowerCase())
+                    );
+                }
+
+                if(filteredServices.length === 0) {
+                    servicesContainer.innerHTML = `<p class="text-center text-gray-500 col-span-full">Nenhum serviço encontrado.</p>`;
+                    return;
+                }
+                
+                filteredServices.forEach(service => {
+                    const card = document.createElement('div');
+                    card.className = 'service-card bg-white border border-[var(--border-color)] rounded-lg shadow-sm overflow-hidden';
+
+                    const documentsHTML = service.documents.length > 0 ? `
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-md flex items-center"><span class="icon">📄</span>Documentos Necessários</h4>
+                            <ul class="list-disc list-inside mt-2 text-[var(--text-light)] pl-2 space-y-1">
+                                ${service.documents.map(doc => `<li>${doc}</li>`).join('')}
+                            </ul>
+                        </div>` : '';
+                    
+                    const requirementsHTML = service.requirements.length > 0 ? `
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-md flex items-center"><span class="icon">✅</span>Requisitos</h4>
+                            <ul class="list-disc list-inside mt-2 text-[var(--text-light)] pl-2 space-y-1">
+                                ${service.requirements.map(req => `<li>${req}</li>`).join('')}
+                            </ul>
+                        </div>` : '';
+
+                    card.innerHTML = `
+                        <div class="service-card-header p-4 flex justify-between items-center">
+                            <h3 class="text-lg font-semibold text-[var(--text-dark)]">${service.title}</h3>
+                            <span class="transform transition-transform duration-300">▼</span>
+                        </div>
+                        <div class="service-card-details px-4">
+                            <p class="text-[var(--text-light)] mb-4">${service.description}</p>
+                            ${documentsHTML}
+                            ${requirementsHTML}
+                            <div>
+                                <h4 class="font-semibold text-md flex items-center"><span class="icon">➡️</span>Procedimento</h4>
+                                <ol class="list-decimal list-inside mt-2 text-[var(--text-light)] pl-2 space-y-1">
+                                    ${service.procedure.map(step => `<li>${step}</li>`).join('')}
+                                </ol>
+                            </div>
+                        </div>
+                    `;
+                    servicesContainer.appendChild(card);
+                });
+            }
+            
+            categoryNav.addEventListener('click', (e) => {
+                if(e.target.tagName === 'BUTTON'){
+                    const category = e.target.dataset.category;
+                    searchInput.value = '';
+                    renderServices(category);
+
+                    document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
+                    e.target.classList.add('active');
+                }
+            });
+
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value;
+                const activeCategory = document.querySelector('.sidebar-item.active').dataset.category;
+                renderServices(activeCategory, searchTerm);
+            });
+            
+            servicesContainer.addEventListener('click', (e) => {
+                const header = e.target.closest('.service-card-header');
+                if (header) {
+                    const details = header.nextElementSibling;
+                    const icon = header.querySelector('span');
+                    const isOpen = details.classList.contains('open');
+
+                    document.querySelectorAll('.service-card-details.open').forEach(openDetail => {
+                        if (openDetail !== details) {
+                             openDetail.classList.remove('open');
+                             openDetail.previousElementSibling.querySelector('span').style.transform = 'rotate(0deg)';
+                        }
+                    });
+
+                    details.classList.toggle('open');
+                    icon.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+                }
+            });
+
+            initNav();
+            renderServices();
+        });
+    </script>
+</body>
+</html>
