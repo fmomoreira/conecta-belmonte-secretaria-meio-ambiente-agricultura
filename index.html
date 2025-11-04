@@ -439,9 +439,9 @@
                             ${requirementsHTML}
                             <div>
                                 <h4 class="font-semibold text-md flex items-center"><span class="icon">➡️</span>Procedimento</h4>
-                                <ol class="list-decimal list-inside mt-2 text-[var(--text-light)] pl-2 space-y-1">
-                                    ${service.procedure.map(step => `<li>${step}</li>`).join('')}
-                                </ol>
+                                <div class="mt-2 text-[var(--text-light)] space-y-2">
+                                    ${service.procedure.map(step => `<p>${step}</p>`).join('')}
+                                </div>
                             </div>
                         </div>
                     `;
