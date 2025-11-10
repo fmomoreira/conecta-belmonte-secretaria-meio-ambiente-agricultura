@@ -60,7 +60,7 @@
     <div id="app" class="flex flex-col md:flex-row min-h-screen">
         
         <aside id="sidebar" class="w-full md:w-64 lg:w-72 bg-[var(--bg-sidebar)] p-4 md:p-6 flex-shrink-0">
-            <h1 class="text-xl font-bold text-gray-800 mb-6">Conecta Belmonte</h1>
+            <h1 class="text-xl font-bold text-gray-800 mb-6">Agricultura e Meio Ambiente</h1>
             <nav id="category-nav">
                 <ul class="space-y-2">
                     <li><button data-category="Todos" class="sidebar-item w-full text-left p-3 rounded-lg font-medium text-[var(--text-light)] transition-colors duration-200 hover:bg-gray-300 active">Todos os Serviços</button></li>
@@ -70,7 +70,7 @@
 
         <main class="flex-1 p-4 md:p-8 lg:p-10">
             <header class="mb-8">
-                <h2 class="text-2xl md:text-3xl font-bold text-[var(--text-dark)]">Serviços Agricultura e Meio Ambiente</h2>
+                <h2 class="text-2xl md:text-3xl font-bold text-[var(--text-dark)]">Catálogo de Serviços Rurais e Ambientais</h2>
                 <p class="text-md text-[var(--text-light)] mt-1">Encontre informações sobre cadastros, benefícios e assistência técnica.</p>
                 <div class="mt-6">
                     <input type="text" id="search-input" placeholder="🔎 Pesquisar por serviço..." class="w-full max-w-lg p-3 border border-[var(--border-color)] rounded-lg focus:ring-2 focus:ring-[var(--accent)] focus:outline-none transition-shadow">
@@ -88,77 +88,108 @@
             {
                 "category": "Cadastro e Regularização Rural (INCRA)",
                 "title": "Solicitar cadastramento de imóvel rural (INCRA)",
-                "description": "Procedimento obrigatório para todos os proprietários de imóveis rurais para integrar e regularizar o imóvel no cadastro federal, resultando na emissão do Certificado de Cadastro de Imóvel Rural (CCIR), indispensável para qualquer transação legal com a terra.",
+                "description": "Procedimento obrigatório para todos os proprietários ou possuidores a qualquer título [cite: 47] para integrar e regularizar o imóvel no cadastro federal, resultando na emissão do Certificado de Cadastro de Imóvel Rural (CCIR), indispensável para qualquer transação legal com a terra[cite: 45].",
                 "documents": [
                     "<strong>Pessoa Física:</strong> RG/CNH e CPF (proprietário e cônjuge), Certidão de Casamento/Nascimento.",
-                    "<strong>Pessoa Jurídica:</strong> Cartão CNPJ, Ato Constitutivo, Documentos dos sócios.",
-                    "<strong>Imóvel Rural:</strong> Matrícula, Escritura ou Título de Posse, Planta/Memorial (se houver), NIRF (se houver)."
+                    "<strong>Pessoa Jurídica:</strong> Cartão CNPJ, Ato Constitutivo/Contrato Social, Documentos dos sócios.",
+                    "<strong>Documentação Comprobatória do Imóvel (um dos seguintes, conforme o caso):</strong>",
+                    "  - <strong>Para Área Registrada:</strong> Certidão Imobiliária (Matrícula ou Transcrição) expedida há no máximo 30 dias[cite: 89, 90].",
+                    "  - <strong>Para Posse a Justo Título:</strong> Documento passível de registro que comprove o domínio (Ex: Escritura Pública de Compra e Venda, Formal de Partilha, Carta de Adjudicação, Título Judicial, Título do Poder Público) [cite: 93, 95-104].",
+                    "  - <strong>Para Posse por Simples Ocupação:</strong> Documento que comprova a posse (Ex: Ata Notarial [cite: 120], 'Cessão de Direitos de Posse' registrada em Títulos e Documentos [cite: 124], ou Declaração de órgãos oficiais como Sindicato Rural ou EMATER [cite: 121])."
                 ],
-                "requirements": ["Ser proprietário ou possuidor do imóvel rural.", "O imóvel não deve possuir cadastro prévio no INCRA.", "Possuir toda a documentação necessária."],
+                "requirements": [
+                    "Ser proprietário, titular do domínio útil ou possuidor a qualquer título do imóvel rural[cite: 47].",
+                    "O imóvel não deve possuir cadastro prévio no SNCR (Sistema Nacional de Cadastro Rural)[cite: 329].",
+                    "Possuir toda a documentação comprobatória digitalizada para anexo[cite: 86, 87]."
+                ],
                 "procedure": [
                     "<strong>Presencial:</strong> Comparecer à Secretaria de Agricultura com os documentos para que um atendente realize a solicitação.",
                     "<strong>Online:</strong>",
-                    "1) Acessar o Sistema Nacional de Cadastro Rural (SNCR) com conta Gov.br.",
-                    "2) Preencher a Declaração para Cadastro Rural (DCR) com dados pessoais e do imóvel.",
-                    "3) Anexar a documentação digitalizada.",
-                    "4) Aguardar a análise do INCRA.",
-                    "5) Após aprovação, emitir o CCIR mediante pagamento de taxa."
+                    "1) Acessar o Sistema Nacional de Cadastro Rural (SNCR) com conta Gov.br[cite: 133].",
+                    "2) No menu 'Imóveis', selecionar a opção 'Inclusão de Imóvel Rural Novo'[cite: 282, 330].",
+                    "3) Preencher a Declaração para Cadastro Rural (DCR) com dados nas abas 'Estrutura', 'Uso' e 'Pessoas'[cite: 343].",
+                    "4) Anexar a documentação digitalizada na aba 'Enviar Declaração'[cite: 960, 973].",
+                    "5) Aguardar a análise do INCRA[cite: 1000].",
+                    "6) Após aprovação e processamento [cite: 332], emitir o CCIR mediante pagamento da taxa[cite: 1034, 1086]."
                 ]
             },
             {
                 "category": "Cadastro e Regularização Rural (INCRA)",
-                "title": "Solicitar transferência de imóvel rural (INCRA)",
-                "description": "Procedimento para atualizar a titularidade de uma propriedade já cadastrada no INCRA, necessário em casos de compra e venda, doação ou herança. Garante que o CCIR seja emitido em nome do novo proprietário.",
+                "title": "Solicitar transferência de imóvel rural (Aquisição de Área Total - INCRA)",
+                "description": "Procedimento para atualizar a titularidade de uma propriedade já cadastrada no INCRA (Aquisição de Área Total)[cite: 297], necessário em casos de compra e venda, doação ou herança. Garante que o CCIR seja emitido em nome do novo proprietário.",
                 "documents": [
                     "<strong>Novo Proprietário (Pessoa Física):</strong> RG/CNH e CPF (proprietário e cônjuge), Certidão de Casamento/Nascimento.",
                     "<strong>Novo Proprietário (Pessoa Jurídica):</strong> Cartão CNPJ, Ato Constitutivo, Documentos dos sócios.",
-                    "<strong>Transferência e Imóvel:</strong> Matrícula atualizada em nome do novo dono, Escritura, Formal de Partilha ou Carta de Arrematação, último CCIR, comprovante de quitação do ITR."
+                    "<strong>Documento de Aquisição (um dos seguintes):</strong>",
+                    "  - Certidão Imobiliária (Matrícula) atualizada em nome do novo proprietário[cite: 89, 90].",
+                    "  - Documento de 'Posse a Justo Título' que comprove a transferência (Ex: Escritura Pública de Compra e Venda, Formal de Partilha, Carta de Arrematação)[cite: 95, 102].",
+                    "<strong>Do Imóvel:</strong> Código do Imóvel Rural de 13 dígitos (consta no CCIR anterior)[cite: 298]."
                 ],
-                "requirements": ["Imóvel já deve ter cadastro no INCRA.", "Solicitante deve ser o novo proprietário.", "CCIR anterior deve estar quitado.", "Possuir documento que comprove a transferência."],
+                "requirements": [
+                    "Imóvel já deve ter cadastro ativo no SNCR do INCRA[cite: 295, 297].",
+                    "Solicitante deve ser o novo proprietário ou seu representante legal[cite: 73].",
+                    "Possuir o documento que comprove legalmente a transferência (aquisição da área total)."
+                ],
                 "procedure": [
                     "<strong>Presencial:</strong> Comparecer à Secretaria de Agricultura com os documentos para o atendente realizar a alteração de titularidade.",
                     "<strong>Online:</strong>",
-                    "1) Acessar o SNCR com conta Gov.br (prata ou ouro).",
-                    "2) Selecionar 'Alteração Cadastral' e localizar o imóvel.",
-                    "3) Preencher a DCR com os dados do novo titular.",
-                    "4) Anexar a documentação digitalizada.",
-                    "5) Após análise e aprovação do INCRA, emitir o novo CCIR."
+                    "1) Acessar o SNCR com conta Gov.br[cite: 133].",
+                    "2) No menu 'Imóveis', selecionar a opção 'Aquisição de Área Total'[cite: 280, 297].",
+                    "3) Informar o código de 13 dígitos do imóvel rural a ser adquirido[cite: 298].",
+                    "4) Preencher a DCR atualizando os dados na aba 'Pessoas' (para o novo titular) [cite: 835] e revisando as abas 'Estrutura' e 'Uso'.",
+                    "5) Anexar a documentação digitalizada (documento de aquisição e dados pessoais)[cite: 973].",
+                    "6) Após análise e aprovação do INCRA, emitir o novo CCIR em nome do adquirente[cite: 265]."
                 ]
             },
             {
                 "category": "Cadastro e Regularização Rural (INCRA)",
                 "title": "Solicitar atualização de imóvel rural (INCRA)",
-                "description": "Permite corrigir ou alterar informações de um imóvel já cadastrado no INCRA, como mudança de dono, alteração de área, mudança de dados pessoais do proprietário ou da exploração da terra. Manter o cadastro atualizado é essencial para a validade do CCIR.",
+                "description": "Permite corrigir ou alterar informações de um imóvel já cadastrado no INCRA, como mudança de área (desmembramento, remembramento) [cite: 308, 314], mudança de dados pessoais (ex: estado civil) [cite: 83] ou da exploração da terra[cite: 78]. Manter o cadastro atualizado é essencial para a validade do CCIR.",
                 "documents": [
-                    "<strong>Do Imóvel:</strong> Número do CCIR, Matrícula do imóvel.",
+                    "<strong>Do Imóvel:</strong> Código do Imóvel Rural (CCIR).",
                     "<strong>Do Proprietário:</strong> CPF ou CNPJ, RG/CNH, Comprovante de endereço.",
-                    "<strong>Da Alteração:</strong> Documento que comprova a mudança (ex: Escritura para venda, Certidão de Casamento para mudança de estado civil)."
+                    "<strong>Da Alteração (conforme o caso):</strong>",
+                    "  - <strong>Para Desmembramento/Remembramento:</strong> Planta, memorial descritivo ou documento judicial/matrícula que comprove a nova área.",
+                    "  - <strong>Para Mudança Pessoal:</strong> Ex: Certidão de Casamento (para mudança de estado civil), Comprovante de Endereço (para mudança de localização).",
+                    "  - <strong>Para Anexação (Remembramento):</strong> CCIRs dos imóveis de origem (que cederam área)[cite: 116, 130]."
                 ],
-                "requirements": ["Imóvel deve estar cadastrado no SNCR do Incra."],
+                "requirements": [
+                    "Imóvel deve estar cadastrado no SNCR do Incra[cite: 295].",
+                    "<strong>Para casos de Remembramento (anexação):</strong> Os CCIRs dos imóveis de origem (que cederam a área) devem estar quitados."
+                ],
                 "procedure": [
                     "<strong>Presencial:</strong> Comparecer à Secretaria de Agricultura com os documentos para o atendente realizar a atualização cadastral.",
                     "<strong>Online:</strong>",
-                    "1) Acessar o SNCR com conta Gov.br (prata ou ouro).",
-                    "2) Preencher a Declaração para Cadastro Rural (DCR) com as informações atualizadas.",
-                    "3) Anexar os documentos digitalizados que comprovem a alteração.",
-                    "4) Enviar e acompanhar a análise pelo sistema."
+                    "1) Acessar o SNCR com conta Gov.br[cite: 133].",
+                    "2) Localizar o imóvel em 'Imóveis Cadastrados' e iniciar uma 'Nova Declaração'[cite: 258, 279].",
+                    "3) Preencher a Declaração para Cadastro Rural (DCR) com as informações atualizadas (Ex: marcar 'Ocorreu desmembramento' [cite: 309] ou 'Ocorreu anexação' [cite: 315] na aba 'Estrutura').",
+                    "4) Anexar os documentos digitalizados que comprovem a alteração[cite: 973].",
+                    "5) Enviar e acompanhar a análise pelo sistema em 'Minhas Solicitações'[cite: 287]."
                 ]
             },
             {
                 "category": "Cadastro e Regularização Rural (INCRA)",
                 "title": "Solicitar certidão de cadastro (CCIR)",
-                "description": "Permite a emissão do Certificado de Cadastro de Imóvel Rural (CCIR), a 'identidade' do imóvel rural. Este documento é obrigatório para vender, desmembrar, hipotecar ou obter financiamentos para a propriedade.",
+                "description": "Permite a emissão do Certificado de Cadastro de Imóvel Rural (CCIR), que constitui a prova do cadastro do imóvel rural[cite: 1031]. Este documento é obrigatório para vender, desmembrar, hipotecar ou obter financiamentos para a propriedade[cite: 45, 1032].",
                 "documents": [
-                    "<strong>Online:</strong> Código do Imóvel Rural, CPF ou CNPJ do titular.",
-                    "<strong>Presencial (Pessoa Física):</strong> RG, CPF, Comprovante de residência, Certidão de casamento.",
-                    "<strong>Presencial (Pessoa Jurídica):</strong> CNPJ, Contrato Social, Documentos dos sócios.",
-                    "<strong>Presencial (Imóvel):</strong> Matrícula atualizada, Documento de aquisição."
+                    "<strong>Online:</strong> Código do Imóvel Rural (13 dígitos), CPF ou CNPJ do titular.",
+                    "<strong>Presencial (Identificação):</strong> Documentos pessoais do titular (CPF/RG) ou dados da Pessoa Jurídica (CNPJ)."
                 ],
-                "requirements": ["Imóvel previamente cadastrado no SNCR.", "Dados atualizados.", "Não possuir débitos de taxas anteriores."],
+                "requirements": [
+                    "Imóvel previamente cadastrado no SNCR.",
+                    "O cadastro do imóvel deve estar na situação 'Processada' [cite: 227] (ou seja, atualizado e sem pendências).",
+                    "O CCIR só é considerado válido após o pagamento da Taxa de Serviços Cadastrais (TSC) , emitida junto com o certificado através da Guia de Recolhimento da União (GRU)[cite: 1034, 1092]."
+                ],
                 "procedure": [
-                    "<strong>Presencial:</strong> Comparecer à Secretaria de Agricultura com os documentos para o atendente emitir a certidão.",
-                    "<strong>Online:</strong>",
-                    "1) Acessar o portal de emissão do CCIR do Governo Federal.",
+                    "<strong>Presencial:</strong> Comparecer à Secretaria de Agricultura com os dados do imóvel para o atendente consultar o sistema e emitir a guia.",
+                    "<strong>Online (pelo DCR):</strong>",
+                    "1) Acessar o SNCR com conta Gov.br[cite: 133].",
+                    "2) Na lista 'Imóveis Cadastrados', localizar o imóvel.",
+                    "3) Clicar no ícone 'Emitir CCIR'[cite: 265].",
+                    "4) O sistema gerará o CCIR e a GRU para pagamento.",
+                    "5) Realizar o pagamento da taxa (GRU) no Banco do Brasil[cite: 1093].",
+                    "<strong>Online (Consulta Pública):</strong>",
+                    "1) Acessar o portal de 'Emissão de CCIR' do Governo Federal.",
                     "2) Preencher o formulário com o código do imóvel, CPF/CNPJ, UF e município.",
                     "3) Gerar o PDF, que contém o CCIR e a Guia de Pagamento (GRU).",
                     "4) Pagar a taxa. O CCIR só é válido após o pagamento."
@@ -167,15 +198,24 @@
             {
                 "category": "Cadastro e Regularização Rural (INCRA)",
                 "title": "Verificar cadastro do imóvel no INCRA",
-                "description": "Permite consultar a situação cadastral de um imóvel rural no sistema do INCRA, informando se o cadastro está ativo e regular, além de exibir dados básicos do imóvel e do proprietário.",
-                "documents": ["Código do Imóvel Rural (13 números)", "CPF do titular declarante", "UF e Município da sede do imóvel"],
-                "requirements": ["Imóvel já deve estar cadastrado no SNCR.", "Não possuir débitos da Taxa de Serviços Cadastrais."],
+                "description": "Permite consultar a situação cadastral de um imóvel rural no sistema do INCRA (SNCR), informando se o cadastro está 'Processada', 'Em Análise', 'Com Pendências' ou 'Em Preenchimento' [cite: 227-230].",
+                "documents": [
+                    "Código do Imóvel Rural (13 números)",
+                    "CPF/CNPJ do titular declarante"
+                ],
+                "requirements": [
+                    "O usuário precisa ter acesso à conta Gov.br do titular (para consulta no DCR) [cite: 133] ou possuir os dados do imóvel (para consulta pública)."
+                ],
                 "procedure": [
                     "<strong>Presencial:</strong> Comparecer à Secretaria de Agricultura com os documentos para o atendente realizar a consulta.",
-                    "<strong>Online:</strong>",
-                    "1) Acessar o portal de emissão do CCIR.",
+                    "<strong>Online (via DCR):</strong>",
+                    "1) Acessar o SNCR com conta Gov.br[cite: 133].",
+                    "2) O sistema exibirá a lista de 'Imóveis Cadastrados' vinculados ao CPF/CNPJ.",
+                    "3) Verificar a coluna 'Situação da Última Declaração' para ver o status[cite: 225].",
+                    "<strong>Online (Consulta Pública):</strong>",
+                    "1) Acessar o portal de emissão/consulta do CCIR.",
                     "2) Preencher os dados do imóvel (código, UF, município, CPF/CNPJ).",
-                    "3) O sistema exibirá o status. Se não houver impedimentos, permitirá baixar o CCIR."
+                    "3) O sistema exibirá o status. Se estiver regular e processado, permitirá baixar o CCIR/GRU[cite: 227, 265]."
                 ]
             },
             {
@@ -397,13 +437,15 @@
                 }
 
                 if (searchTerm) {
-                    filteredServices = filteredServices.filter(service => 
-                        service.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                        service.description.toLowerCase().includes(searchTerm.toLowerCase())
-                    );
+                    const normalizedSearchTerm = searchTerm.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                    filteredServices = filteredServices.filter(service => {
+                        const normalizedTitle = service.title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                        const normalizedDescription = service.description.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                        return normalizedTitle.includes(normalizedSearchTerm) || normalizedDescription.includes(normalizedSearchTerm);
+                    });
                 }
 
-                if(filteredServices.length === 0) {
+                if (filteredServices.length === 0) {
                     servicesContainer.innerHTML = `<p class="text-center text-gray-500 col-span-full">Nenhum serviço encontrado.</p>`;
                     return;
                 }
@@ -439,9 +481,9 @@
                             ${requirementsHTML}
                             <div>
                                 <h4 class="font-semibold text-md flex items-center"><span class="icon">➡️</span>Procedimento</h4>
-                                <div class="mt-2 text-[var(--text-light)] space-y-2">
-                                    ${service.procedure.map(step => `<p>${step}</p>`).join('')}
-                                </div>
+                                <ol class="list-decimal list-inside mt-2 text-[var(--text-light)] pl-2 space-y-1">
+                                    ${service.procedure.map(step => `<li>${step}</li>`).join('')}
+                                </ol>
                             </div>
                         </div>
                     `;
